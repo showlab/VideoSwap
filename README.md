@@ -16,9 +16,13 @@
 
 [![Project Page](https://img.shields.io/badge/Project-Website-orange)](https://videoswap.github.io/)
 
-https://github.com/showlab/VideoSwap/assets/31696690/226b2ecc-5cb5-4976-85c1-474a86a2884b
 
-**VideoSwap** is a framework that supports swapping customized concepts into videos without shape restrictions.
+
+https://github.com/showlab/VideoSwap/assets/31696690/7e9395cd-71bb-4d06-960f-5151a5dd06fb
+
+
+
+**VideoSwap** is a framework that supports swapping users' _**customized concepts**_ into videos while _**preserving the background**_. 
 
 >Current diffusion-based video editing primarily focuses on structure-preserved editing by utilizing various dense correspondences to ensure temporal consistency and motion alignment. However, these approaches are often ineffective when the target edit involves a shape change.
 To embark on video editing with shape change, we explore customized video subject swapping in this work, where we aim to replace the main subject in a source video with a target subject having a distinct identity and potentially different shape.
