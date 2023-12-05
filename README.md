@@ -1,6 +1,6 @@
 # VideoSwap
 
-**[VideoSwap: Customized Video Subject Swapping with Interactive Semantic Point Correspondence]()**
+**[VideoSwap: Customized Video Subject Swapping with Interactive Semantic Point Correspondence](https://arxiv.org/abs/2312.02087)**
 <br/>
 [Yuchao Gu](https://ycgu.site/),
 [Yipin Zhou](https://yipin.github.io/),
@@ -14,6 +14,7 @@
 [Kevin Tang](https://ai.stanford.edu/~kdtang/)
 <br/>
 
+[![arXiv](https://img.shields.io/badge/arXiv-2312.02087-b31b1b.svg)](https://arxiv.org/abs/2312.02087)
 [![Project Page](https://img.shields.io/badge/Project-Website-orange)](https://videoswap.github.io/)
 
 
