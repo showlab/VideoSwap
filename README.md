@@ -50,7 +50,7 @@ This codebase builds on [diffusers](https://github.com/huggingface/diffusers). T
 @article{gu2023videoswap,
   title={VideoSwap: Customized Video Subject Swapping with Interactive Semantic Point Correspondence},
   author={Gu, Yuchao and Zhou, Yipin and Wu, Bichen and Yu, Licheng and Liu, Jia-Wei and Zhao, Rui and Wu, Jay Zhangjie and Zhang, David Junhao and Shou, Mike Zheng and Tang, Kevin},
-  journal={arXiv preprint arXiv:},
+  journal={arXiv preprint arXiv:2312.02087},
   year={2023}
 }
 
