@@ -30,6 +30,18 @@ In contrast to previous methods that rely on dense correspondences, we introduce
 
 For more see the [project webpage](https://videoswap.github.io/).
 
+## 📜 License and Acknowledgement
+
+This codebase builds on [diffusers](https://github.com/huggingface/diffusers). Thanks for open-sourcing! Besides, we acknowledge following amazing open-sourcing projects:
+
+- AnimateDiff (https://github.com/guoyww/AnimateDiff).
+
+
+- Mix-of-Show (https://github.com/TencentARC/Mix-of-Show).
+
+
+- Co-tracker (https://github.com/facebookresearch/co-tracker).
+
 ## Citation
 
 ```bibtex
