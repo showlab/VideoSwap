@@ -1,4 +1,4 @@
- 🛑 **Due to legal considerations, please fill in [this form](https://forms.gle/TB9fatZEzXTUwoj88) to request access.**
+ 🛑 **Due to legal constraints, please fill out [this form](https://forms.gle/TB9fatZEzXTUwoj88) to inquire about the process of reproducing the original paper for research purposes.**
 
 # VideoSwap
 
@@ -34,7 +34,7 @@ For more see the [project webpage](https://videoswap.github.io/).
 
 ## 🛑 Disclaimer
 
-This repository is a re-implementation of VideoSwap conducted by the first author during his time at NUS. The goal of this repository is solely to reproduce the findings of the original paper for research purposes. **Due to legal considerations, please fill in [this form](https://forms.gle/TB9fatZEzXTUwoj88) to request access.**
+This repository is a re-implementation of VideoSwap conducted by the first author during his time at NUS. The goal of this repository is solely to reproduce the findings of the original paper. **Due to legal constraints, please fill out [this form](https://forms.gle/TB9fatZEzXTUwoj88) to inquire about the process of reproducing the original paper for research purposes.**
 
 ## 🚩 Updates
 
