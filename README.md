@@ -1,4 +1,4 @@
- 🛑 **Due to legal considerations, the code is available as open-source on a per-request basis. Please fill in [this form](https://forms.gle/TB9fatZEzXTUwoj88) to request code access.**
+ 🛑 **Due to legal considerations, please fill in [this form](https://forms.gle/TB9fatZEzXTUwoj88) to request access.**
 
 # VideoSwap
 
@@ -34,7 +34,7 @@ For more see the [project webpage](https://videoswap.github.io/).
 
 ## 🛑 Disclaimer
 
-This repository is a re-implementation of VideoSwap conducted by the first author during his time at NUS. The goal of this repository is to replicate the original paper's findings and results, primarily for academic and research purposes. **Due to legal considerations, the code is available as open-source on a per-request basis. Please fill in [this form](https://forms.gle/TB9fatZEzXTUwoj88) to request code access.**
+This repository is a re-implementation of VideoSwap conducted by the first author during his time at NUS. The goal of this repository is solely to reproduce the findings of the original paper for research purposes. **Due to legal considerations, please fill in [this form](https://forms.gle/TB9fatZEzXTUwoj88) to request access.**
 
 ## 🚩 Updates
 
