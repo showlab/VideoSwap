@@ -1,3 +1,5 @@
+ 🛑 **Due to legal considerations, the code is available as open-source on a per-request basis. Please fill in [this form](https://forms.gle/TB9fatZEzXTUwoj88) to request code access.**
+
 # VideoSwap
 
 **[CVPR 2024] - [VideoSwap: Customized Video Subject Swapping with Interactive Semantic Point Correspondence](https://arxiv.org/abs/2312.02087)**
