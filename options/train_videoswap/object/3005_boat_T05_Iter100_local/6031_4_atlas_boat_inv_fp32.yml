@@ -1,0 +1,110 @@
+name: 6031_4_atlas_boat_inv_fp32
+manual_seed: 0
+mixed_precision: 'no'
+
+# dataset and data loader settings
+datasets:
+  frame_path: datasets/paper_evaluation/object/boat/frames
+  mask_path: datasets/paper_evaluation/object/boat/masks
+  flow_path: datasets/paper_evaluation/object/boat/flows
+  annotation_path: datasets/paper_evaluation/object/boat/annotation/00000.json
+  res_x: 768
+  res_y: 448
+  max_frames: 72
+  filter_optical_flow: true
+  sample_batch_size: 10000
+
+models:
+  FG_UV_Mapping:
+    input_dim: 3
+    output_dim: 2
+    hidden_dim: 256
+    pe_type: none
+    pe_dim: 4
+    mlp_type: origin
+    mlp_layers: 6
+    skip_layers: []
+
+  FG_UV_Mapping_Inverse:
+    input_dim: 3
+    output_dim: 3
+    hidden_dim: 256
+    pe_type: none
+    pe_dim: 4
+    mlp_type: origin
+    mlp_layers: 6
+    skip_layers: []
+
+  BG_UV_Mapping:
+    input_dim: 3
+    output_dim: 2
+    hidden_dim: 256
+    pe_type: none
+    pe_dim: 2
+    mlp_type: origin
+    mlp_layers: 4
+    skip_layers: []
+
+  F_Atlas:
+    input_dim: 2
+    output_dim: 3
+    hidden_dim: 256
+    pe_type: hash_encoding
+    pe_dim: 10
+    mlp_type: origin
+    mlp_layers: 8
+    skip_layers: [4, 7]
+    fp16: false
+
+  F_Alpha:
+    input_dim: 3
+    output_dim: 1
+    hidden_dim: 256
+    pe_type: encoding
+    pe_dim: 5
+    mlp_type: origin
+    mlp_layers: 8
+    skip_layers: []
+
+# path
+path:
+  pretrained_model_path: ~
+
+# training settings
+train:
+  optimizer:
+    type: Adam
+    lr: !!float 1e-4
+
+  total_iter: 50000
+
+  pretrain_UV_mapping_iter: 100
+  pretrain_alpha_iter: 50000
+  pretrain_global_rigidity_iter: 5000
+  uv_mapping_scale: 0.8
+  derivative_amount: 1
+  global_derivative_amount: 100
+
+  loss_cfg:
+    reconstruction_loss:
+      rgb_loss_weight: 5000.0
+      gradient_loss_weight: 1000.0
+      alpha_loss_weight: 2000.0
+    rigidity_loss:
+      rigidity_loss_weight: 1.0
+      global_rigidity_fg_loss_weight: 5.0
+      global_rigidity_bg_loss_weight: 50.0
+    flow_loss:
+      flow_loss_weight: 5.0
+      alpha_flow_loss_weight: 49.0
+    sparsity_loss:
+      sparsity_loss_weight: 1000.0
+
+# validation settings
+val:
+  val_freq: 10000
+
+# logging settings
+logger:
+  print_freq: 100
+  save_checkpoint_freq: !!float 10000

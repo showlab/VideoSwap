@@ -1,0 +1,107 @@
+name: 1003_final_woman_running_T07_Iter50
+manual_seed: 74831
+mixed_precision: fp16
+gradient_checkpointing: true
+
+# dataset and data loader settings
+datasets:
+  type: SingleVideoPointDataset
+  path: datasets/paper_evaluation/human/woman_running/frames
+  tap_path: datasets/paper_evaluation/human/woman_running/TAP.pth
+  prompt: a woman is running down the sidewalk near the water and a grassy area with a large building in the background
+  num_frames: 16
+  total_frames: 64
+  video_transform:
+    - { type: Resize, size: [512, 512]}
+    - { type: ToTensor }
+    - { type: Normalize, mean: [ 0.5 ], std: [ 0.5 ] }
+  batch_size_per_gpu: 1
+  dataset_enlarge_ratio: 100
+
+models:
+  unet:
+    type: AnimateDiffUNet3DModel
+    inference_config_path: options/model_cfg/inference.yml
+    motion_module_path: experiments/pretrained_models/animatediff_motion_module/mm_sd_v14.ckpt
+  adapter:
+    type: SparsePointAdapter
+    model_config_path: options/model_cfg/point_adapter.yml
+
+# path
+path:
+  pretrained_model_path: experiments/pretrained_models/chilloutmix
+
+# training settings
+train:
+  train_pipeline: VideoSwapTrainer
+
+  optimizer:
+    type: AdamW
+    lr: !!float 5e-4
+    weight_decay: 0.01
+    betas: [ 0.9, 0.999 ]
+
+  tune_cfg:
+    drop_rate: 0.2
+    min_timestep: 0.7
+    loss_type: global
+
+  lr_scheduler: constant
+  total_iter: 50
+  warmup_iter: 0
+
+# validation settings
+val:
+  val_pipeline: VideoSwapPipeline
+  save_type: video
+  val_freq: 50
+  editing_config:
+    use_invertion_latents: True
+    use_blend: true
+    guidance_scale: 7.5
+    visualize_point: True
+    editing_prompts:
+      woman_to_ironman:
+        replace: woman -> <ironman1> <ironman2> in red armor
+        lora_path: experiments/pretrained_models/ED-LoRA/human/8105_EDLoRA_ironman_Cmix_B4_Repeat500_nomask/models/edlora_model-latest.pth---0.3
+        tap_path: ~
+        select_point: ~
+      woman_to_batman:
+        replace: woman -> <batman1> <batman2> in black armor
+        lora_path: experiments/pretrained_models/ED-LoRA/human/8104_EDLoRA_batmanv3_Cmix_B4_Repeat500_nomask/models/edlora_model-latest.pth---0.5
+        tap_path: ~
+        select_point: ~
+      woman_to_thanos:
+        replace: woman -> <thanos1> <thanos2>
+        lora_path: experiments/pretrained_models/ED-LoRA/human/8103_EDLoRA_thanos_Cmix_B4_Repeat250/models/edlora_model-latest.pth---1.0
+        tap_path: ~
+        select_point: ~
+        t2i_guidance_scale: 0.6
+      woman_to_hermione:
+        replace: woman -> <hermione1> <hermione2> in white shirt
+        lora_path: experiments/pretrained_models/ED-LoRA/human/8102_EDLoRA_hermione_Cmix_B4_Repeat500/models/edlora_model-latest.pth---0.7
+        tap_path: ~
+        select_point: ~
+        blend_cfg:
+          cross_replace_steps: 0.5
+          self_replace_steps: 0.5
+        t2i_guidance_scale: 0.4
+      woman_to_potter:
+        replace: woman -> <potter1> <potter2> in white shirt
+        lora_path: experiments/pretrained_models/ED-LoRA/human/8101_EDLoRA_potter_Cmix_B4_Repeat500/models/edlora_model-latest.pth---0.7
+        tap_path: ~
+        select_point: ~
+        blend_cfg:
+          cross_replace_steps: 0.5
+          self_replace_steps: 0.5
+        t2i_guidance_scale: 0.4
+    negative_prompt: longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality
+    num_inference_steps: 50
+    t2i_guidance_scale: 0.5
+    t2i_start: 0.0
+    t2i_end: 0.3
+
+# logging settings
+logger:
+  print_freq: 10
+  save_checkpoint_freq: !!float 50

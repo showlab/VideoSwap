@@ -1,0 +1,98 @@
+name: 2006_rabbit_T05_Iter100
+manual_seed: 74831
+mixed_precision: fp16
+gradient_checkpointing: true
+
+# dataset and data loader settings
+datasets:
+  type: SingleVideoPointDataset
+  path: datasets/paper_evaluation/animal/rabbit/frames
+  tap_path: datasets/paper_evaluation/animal/rabbit/TAP.pth
+  prompt: a rabbit eating a piece of watermelon on a table
+  num_frames: 16
+  total_frames: 64
+  video_transform:
+    - { type: Resize, size: 512}
+    - { type: ToTensor }
+    - { type: Normalize, mean: [ 0.5 ], std: [ 0.5 ] }
+
+  batch_size_per_gpu: 1
+  dataset_enlarge_ratio: 100
+
+models:
+  unet:
+    type: AnimateDiffUNet3DModel
+    inference_config_path: options/model_cfg/inference.yml
+    motion_module_path: experiments/pretrained_models/animatediff_motion_module/mm_sd_v14.ckpt
+  adapter:
+    type: SparsePointAdapter
+    model_config_path: options/model_cfg/point_adapter.yml
+
+# path
+path:
+  pretrained_model_path: experiments/pretrained_models/chilloutmix
+
+# training settings
+train:
+  train_pipeline: VideoSwapTrainer
+
+  optimizer:
+    type: AdamW
+    lr: !!float 5e-4
+    weight_decay: 0.01
+    betas: [ 0.9, 0.999 ]
+
+  tune_cfg:
+    drop_rate: 0.2
+    min_timestep: 0.5
+    loss_type: global
+
+  lr_scheduler: constant
+  total_iter: 100
+  warmup_iter: 0
+
+# validation settings
+val:
+  val_pipeline: VideoSwapPipeline
+  save_type: video
+  val_freq: 100
+  editing_config:
+    use_invertion_latents: True
+    use_blend: true
+    guidance_scale: 7.5
+    visualize_point: True
+    editing_prompts:
+      rabbit_to_dogB:
+        replace: rabbit -> <dogB1> <dogB2>
+        lora_path: experiments/pretrained_models/ED-LoRA/animal/8002_EDLoRA_dogB_Cmix_B2_Repeat300/models/edlora_model-latest.pth---1.0
+        tap_path: datasets/paper_evaluation/animal/rabbit/TAP_dogB.pth
+        select_point: ~
+        t2i_guidance_scale: 0.3
+        blend_cfg:
+          blend_th: 0.1
+      rabbit_to_dogA:
+        replace: rabbit -> <dogA1> <dogA2>
+        lora_path: experiments/pretrained_models/ED-LoRA/animal/8001_EDLoRA_dogA_Cmix_B2_Repeat300/models/edlora_model-latest.pth---1.0
+        tap_path: ~
+        select_point: ~
+        t2i_guidance_scale: 0.3
+        blend_cfg:
+          blend_th: 0.1
+      rabbit_to_catA:
+        replace: rabbit -> <catA1> <catA2>
+        lora_path: experiments/pretrained_models/ED-LoRA/animal/8003_EDLoRA_catA_Cmix_B2_Repeat300/models/edlora_model-latest.pth---1.0
+        tap_path: ~
+        select_point: ~
+        blend_cfg:
+          blend_th: 0.1
+        t2i_guidance_scale: 0.6
+    negative_prompt: worst quality, low quality, deformed, distorted, disfigured, bad eyes, bad anatomy, disconnected limbs, wrong body proportions, low quality, worst quality, text, watermark, signatre, logo, illustration, painting, cartoons, ugly, easy_negative
+    num_inference_steps: 50
+    t2i_guidance_scale: 0.5
+    t2i_start: 0.0
+    t2i_end: 0.5
+
+# logging settings
+logger:
+  print_freq: 10
+  save_checkpoint_freq: !!float 100

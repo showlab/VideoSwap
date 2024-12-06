@@ -1,0 +1,101 @@
+name: 1004_final_ss1832_manbasketball_T07_Iter50
+manual_seed: 74831
+mixed_precision: fp16
+gradient_checkpointing: true
+
+# dataset and data loader settings
+datasets:
+  type: SingleVideoPointDataset
+  path: datasets/paper_evaluation/human/ss_18324928_man_basketball/frames
+  tap_path: datasets/paper_evaluation/human/ss_18324928_man_basketball/TAP.pth
+  prompt: a man spinning a basketball on finger in a stadium with lights on the sidelines
+  num_frames: 16
+  total_frames: 64
+  video_transform:
+    - { type: Resize, size: [448, 768]}
+    - { type: ToTensor }
+    - { type: Normalize, mean: [ 0.5 ], std: [ 0.5 ] }
+  batch_size_per_gpu: 1
+  dataset_enlarge_ratio: 100
+
+models:
+  unet:
+    type: AnimateDiffUNet3DModel
+    inference_config_path: options/model_cfg/inference.yml
+    motion_module_path: experiments/pretrained_models/animatediff_motion_module/mm_sd_v14.ckpt
+  adapter:
+    type: SparsePointAdapter
+    model_config_path: options/model_cfg/point_adapter.yml
+
+# path
+path:
+  pretrained_model_path: experiments/pretrained_models/chilloutmix
+
+# training settings
+train:
+  train_pipeline: VideoSwapTrainer
+
+  optimizer:
+    type: AdamW
+    lr: !!float 5e-4
+    weight_decay: 0.01
+    betas: [ 0.9, 0.999 ]
+
+  tune_cfg:
+    drop_rate: 0.2
+    min_timestep: 0.7
+    loss_type: global
+
+  lr_scheduler: constant
+  total_iter: 50
+  warmup_iter: 0
+
+# validation settings
+val:
+  val_pipeline: VideoSwapPipeline
+  save_type: video
+  val_freq: 50
+  editing_config:
+    use_invertion_latents: True
+    use_blend: true
+    guidance_scale: 7.5
+    visualize_point: True
+    editing_prompts:
+      man_to_batman:
+        replace: man -> armored <batman1> <batman2>
+        lora_path: experiments/pretrained_models/ED-LoRA/human/8104_EDLoRA_batmanv3_Cmix_B4_Repeat500_nomask/models/edlora_model-latest.pth---0.5
+        tap_path: ~
+        select_point: ~
+      man_to_ironman:
+        replace: man -> armored <ironman1> <ironman2>
+        lora_path: experiments/pretrained_models/ED-LoRA/human/8105_EDLoRA_ironman_Cmix_B4_Repeat500_nomask/models/edlora_model-latest.pth---0.5
+        tap_path: ~
+        select_point: ~
+      man_to_thanos:
+        replace: man -> <thanos1> <thanos2>, purple skin
+        lora_path: experiments/pretrained_models/ED-LoRA/human/8103_EDLoRA_thanos_Cmix_B4_Repeat250/models/edlora_model-latest.pth---1.0
+        tap_path: ~
+        select_point: ~
+        t2i_guidance_scale: 0.7
+      man_to_hermione:
+        replace: man -> <hermione1> <hermione2> in grey T-shirt
+        lora_path: experiments/pretrained_models/ED-LoRA/human/8102_EDLoRA_hermione_Cmix_B4_Repeat500/models/edlora_model-latest.pth---0.7
+        tap_path: ~
+        select_point: ~ # for remove points
+        t2i_guidance_scale: 0.4
+      man_to_potter:
+        replace: man -> <potter1> <potter2>
+        lora_path: experiments/pretrained_models/ED-LoRA/human/8101_EDLoRA_potter_Cmix_B4_Repeat500/models/edlora_model-latest.pth---0.7
+        tap_path: ~
+        select_point: ~ # for remove points
+        t2i_guidance_scale: 0.5
+    negative_prompt: longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality
+    num_inference_steps: 50
+    t2i_guidance_scale: 0.5
+    t2i_start: 0.0
+    t2i_end: 0.3
+
+# logging settings
+logger:
+  print_freq: 10
+  save_checkpoint_freq: !!float 50

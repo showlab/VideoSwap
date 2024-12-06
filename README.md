@@ -1,5 +1,3 @@
- **Due to legal constraints, please fill out [this form](https://forms.gle/TB9fatZEzXTUwoj88) to inquire about the process of reproducing the original paper for research purposes.**
-
 # VideoSwap
 
 **[CVPR 2024] - [VideoSwap: Customized Video Subject Swapping with Interactive Semantic Point Correspondence](https://arxiv.org/abs/2312.02087)**
@@ -22,7 +20,7 @@ Showlab, National University of Singapore; GenAI, Meta
 [![arXiv](https://img.shields.io/badge/arXiv-2312.02087-b31b1b.svg)](https://arxiv.org/abs/2312.02087)
 [![Project Page](https://img.shields.io/badge/Project-Website-orange)](https://videoswap.github.io/)
 
-https://github.com/showlab/VideoSwap/assets/31696690/7e9395cd-71bb-4d06-960f-5151a5dd06fb
+https://github.com/showlab/VideoSwap-Release/assets/31696690/3be0641a-ccab-4072-91c5-e1b2883a62df
 
 **VideoSwap** is a framework that supports swapping users' _**customized concepts**_ into videos while _**preserving the background**_. 
 
@@ -34,7 +32,7 @@ For more see the [project webpage](https://videoswap.github.io/).
 
 ## 🛑 Disclaimer
 
-This repository is a re-implementation of VideoSwap conducted by the first author during his time at NUS. **Due to legal constraints, please fill out [this form](https://forms.gle/TB9fatZEzXTUwoj88) to inquire about the process of reproducing the original paper for research purposes.**
+This repository is a re-implementation of VideoSwap conducted by the first author during his time at NUS. The goal of this repository is to replicate the original paper's findings and results, primarily for academic and research purposes. **Due to legal considerations, the code is available as open-source on a per-request basis. Please fill in [this form](https://forms.gle/TB9fatZEzXTUwoj88) to request code access.**
 
 ## 🚩 Updates
 
@@ -131,3 +129,4 @@ If you find this repository useful in your work, consider citing the following p
   year={2023}
 }
 ```
+

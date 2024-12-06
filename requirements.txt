@@ -1,0 +1,8 @@
+accelerate==0.28.0
+diffusers==0.19.3
+imageio==2.34.0
+imageio[ffmpeg]
+omegaconf==2.3.0
+opencv-python==4.9.0.80
+transformers==4.39.1
+einops

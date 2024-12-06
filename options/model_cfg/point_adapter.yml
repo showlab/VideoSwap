@@ -1,0 +1,12 @@
+channels:
+  - 320
+  - 640
+  - 1280
+  - 1280
+embedding_channels: 1280
+downsample_rate:
+  - 8
+  - 16
+  - 32
+  - 64
+mid_dim: 128

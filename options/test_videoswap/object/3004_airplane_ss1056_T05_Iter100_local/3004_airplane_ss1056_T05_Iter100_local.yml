@@ -1,0 +1,89 @@
+name: 3004_airplane_ss1056_T05_Iter100_local
+manual_seed: 74831
+mixed_precision: fp16
+gradient_checkpointing: true
+
+# dataset and data loader settings
+datasets:
+  type: SingleVideoPointDataset
+  path: datasets/paper_evaluation/object/ss_1056182372_airplane/frames
+  tap_path: datasets/paper_evaluation/object/ss_1056182372_airplane/TAP.pth
+  prompt: a airplane flying above the clouds in the sky
+  num_frames: 16
+  total_frames: 64
+  video_transform:
+    - { type: Resize, size: [448, 768]}
+    - { type: ToTensor }
+    - { type: Normalize, mean: [ 0.5 ], std: [ 0.5 ] }
+
+  batch_size_per_gpu: 1
+  dataset_enlarge_ratio: 100
+
+models:
+  unet:
+    type: AnimateDiffUNet3DModel
+    inference_config_path: options/model_cfg/inference.yml
+    motion_module_path: experiments/pretrained_models/animatediff_motion_module/mm_sd_v14.ckpt
+  adapter:
+    type: SparsePointAdapter
+    model_config_path: options/model_cfg/point_adapter.yml
+
+# path
+path:
+  pretrained_model_path: experiments/pretrained_models/chilloutmix
+  pretrained_adapter_path: experiments/pretrained_models/VideoSwap_Model/object/3004_airplane_ss1056_T05_Iter100_local/models/models_100/adapter.pth
+
+# training settings
+train:
+  train_pipeline: VideoSwapTrainer
+
+  optimizer:
+    type: AdamW
+    lr: !!float 5e-4
+    weight_decay: 0.01
+    betas: [ 0.9, 0.999 ]
+
+  tune_cfg:
+    drop_rate: 0.2
+    min_timestep: 0.5
+    loss_type: local
+
+  lr_scheduler: constant
+  total_iter: 100
+  warmup_iter: 0
+
+# validation settings
+val:
+  val_pipeline: VideoSwapPipeline
+  save_type: video
+  val_freq: 100
+  editing_config:
+    use_invertion_latents: True
+    use_blend: true
+    visualize_point: true
+    guidance_scale: 7.5
+    editing_prompts:
+      airplane_to_helicopter:
+        replace: airplane -> helicopter
+        lora_path: ~
+        tap_path: ~
+        select_point: ["front", "bottom"]
+        blend_cfg:
+          blend_th: 0.1
+        negative_prompt: wing, worst quality, low quality, deformed, distorted, disfigured, bad eyes, bad anatomy, disconnected limbs, wrong body proportions, low quality, worst quality, text, watermark, signatre, logo, illustration, painting, cartoons, ugly, easy_negative
+      airplane_to_f35:
+        replace: airplane -> <f35_1> <f35_2>
+        lora_path: experiments/pretrained_models/ED-LoRA/object/8205_EDLoRA_f35_Cmix_B2_Repeat300_nomask/models/edlora_model-latest.pth---1.0
+        tap_path: ~
+        select_point: ["front", "left wing"]
+        t2i_guidance_scale: 0.3
+    negative_prompt: worst quality, low quality, deformed, distorted, disfigured, bad eyes, bad anatomy, disconnected limbs, wrong body proportions, low quality, worst quality, text, watermark, signatre, logo, illustration, painting, cartoons, ugly, easy_negative
+    num_inference_steps: 50
+    t2i_guidance_scale: 0.5
+    t2i_start: 0.0
+    t2i_end: 0.5
+
+# logging settings
+logger:
+  print_freq: 10
+  save_checkpoint_freq: !!float 100
