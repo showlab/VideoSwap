@@ -1,4 +1,4 @@
- 🛑 **Due to legal constraints, please fill out [this form](https://forms.gle/TB9fatZEzXTUwoj88) to inquire about the process of reproducing the original paper for research purposes.**
+ **Due to legal constraints, please fill out [this form](https://forms.gle/TB9fatZEzXTUwoj88) to inquire about the process of reproducing the original paper for research purposes.**
 
 # VideoSwap
 
